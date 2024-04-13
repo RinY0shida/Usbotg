@@ -1,22 +1,28 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 int main() {
-    std::ofstream serial("/dev/ttyUSB0");
+    std::fstream serial("/dev/ttyUSB0", std::ios::in | std::ios::out | std::ios::binary);
+
      //sending data to the serial port
-    if(serialOut.is_open()) {
+    if (serial.is_open()) {
         serial << "Hello, World!" << std::endl;
-    } else {
+
+         //reading data from the serial port
+        std::string line;
+
+        while (std::getline(serial, line)) {
+            std::cout << line << std::endl;
+        }
+
+    } 
+    else {
         std::cerr << "Error: Could not open serial port." << std::endl;
     }
 
      //reading data from the serial port
-    std::ifstream serialIn("/dev/ttyUSB0");
-    std::string line;
-
-    while(std::getline(serialIn, line)) {
-        std::cout << line << std::endl;
-    }
-    serialIn.close();
+     
+    serial.close();
     return 0;
 }
